@@ -6,18 +6,27 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-type TickerHandler struct {
-	serv services.TickerService
+type request struct {
+	Ticker string `json:"ticker"`
 }
 
-func NewTickerHandler(serv services.TickerService) *TickerHandler {
+type response struct {
+	Ticker     string
+	Price      float64
+	Difference float64
+}
+
+type TickerHandler struct {
+	serv *services.TickerService
+}
+
+func NewTickerHandler(serv *services.TickerService) *TickerHandler {
 	return &TickerHandler{serv: serv}
 }
 
 func (h *TickerHandler) AddTicker(ctx *fiber.Ctx) error {
-	var req struct {
-		Ticker string `json:"ticker"`
-	}
+
+	var req request
 
 	if err := ctx.BodyParser(&req); err != nil {
 		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{
@@ -48,10 +57,16 @@ func (h *TickerHandler) FetchPrice(ctx *fiber.Ctx) error {
 		})
 	}
 
+	resp := response{
+		Ticker:     ticker,
+		Price:      price,
+		Difference: difference,
+	}
+
 	response := fiber.Map{
-		"Ticker":     ticker + "/USDT",
-		"Price":      price,
-		"Difference": difference,
+		"Ticker":     resp.Ticker + "/USDT",
+		"Price":      resp.Price,
+		"Difference": resp.Difference,
 	}
 
 	return ctx.JSON(response)

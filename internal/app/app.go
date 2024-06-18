@@ -26,11 +26,11 @@ func Run() {
 	}()
 
 	repo := repository.NewSQLRepository(database)
-	service := services.NewTickerService(repo)
+	service := services.NewTickerService(repo, config)
 
 	app := fiber.New()
 
-	handlers.RegistrationRoutess(app, database)
+	handlers.RegistrationRoutess(app, service)
 
 	go func() {
 		for {

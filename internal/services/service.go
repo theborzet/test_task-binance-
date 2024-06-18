@@ -5,16 +5,20 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"test_api/internal/config"
 	"test_api/internal/db/repository"
 	"time"
 )
 
 type TickerService struct {
 	repo repository.Repository
+	cfg  *config.Config
 }
 
-func NewTickerService(repo repository.Repository) *TickerService {
-	return &TickerService{repo: repo}
+func NewTickerService(repo repository.Repository, cfg *config.Config) *TickerService {
+	return &TickerService{
+		repo: repo,
+		cfg:  cfg}
 }
 
 func (s *TickerService) AddTicker(tiker string) error {
@@ -32,11 +36,19 @@ func (s *TickerService) FetchPrice(ticker, dateFrom, dateTo string) (float64, fl
 		return 0, 0, err
 	}
 
-	return s.repo.GetPriceAndDifference(ticker, dateFromTime, dateToTime)
+	last_price, first_price, err := s.repo.GetPriceAndDifference(ticker, dateFromTime, dateToTime)
+	if err != nil {
+		return 0, 0, err
+	}
+
+	difference := ((last_price - first_price) / first_price) * 100
+
+	return last_price, difference, nil
+
 }
 
 func (s *TickerService) GetTickerPriceFromBinance(ticker string) (float64, error) {
-	url := fmt.Sprintf("https://api.binance.com/api/v3/ticker/price?symbol=%sUSDT", ticker)
+	url := fmt.Sprintf("%s%sUSDT", s.cfg.BinanceAPIURL, ticker)
 	resp, err := http.Get(url)
 	if err != nil {
 		return 0, err

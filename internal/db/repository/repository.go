@@ -35,7 +35,7 @@ func (r *SQLRepository) AddTickerPrice(tickeID int, price float64, timestamp str
 }
 
 func (r *SQLRepository) GetPriceAndDifference(ticker string, dateFrom, dateTo time.Time) (float64, float64, error) {
-	var first_price, last_price, difference float64
+	var first_price, last_price float64
 
 	query := `
         SELECT price
@@ -65,9 +65,7 @@ func (r *SQLRepository) GetPriceAndDifference(ticker string, dateFrom, dateTo ti
 		return 0, 0, err
 	}
 
-	difference = ((last_price - first_price) / first_price) * 100
-
-	return last_price, difference, nil
+	return last_price, first_price, nil
 
 }
 

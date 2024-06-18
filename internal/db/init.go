@@ -20,6 +20,8 @@ func Init(c *config.Config) *sqlx.DB {
 		log.Fatalln(err)
 	}
 
+	migrateDB(db)
+
 	return db
 }
 
@@ -30,7 +32,7 @@ func Close(db *sqlx.DB) error {
 	return nil
 }
 
-func MigrateDB(db *sqlx.DB) {
+func migrateDB(db *sqlx.DB) {
 	_, err := db.Exec(`
         CREATE TABLE IF NOT EXISTS tickers (
 			id SERIAL PRIMARY KEY,
