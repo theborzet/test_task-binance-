@@ -1,6 +1,6 @@
 package main
 
-import "test_api/internal/app"
+import "github.com/theborzet/test_task-binance-/internal/app"
 
 func main() {
 	app.Run()

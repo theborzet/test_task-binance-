@@ -5,9 +5,10 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
-	"test_api/internal/config"
-	"test_api/internal/db/repository"
 	"time"
+
+	"github.com/theborzet/test_task-binance-/internal/config"
+	"github.com/theborzet/test_task-binance-/internal/db/repository"
 )
 
 type TickerService struct {

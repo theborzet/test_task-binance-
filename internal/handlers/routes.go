@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"test_api/internal/services"
+	"github.com/theborzet/test_task-binance-/internal/services"
 
 	"github.com/gofiber/fiber/v2"
 )

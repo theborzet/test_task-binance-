@@ -2,17 +2,20 @@ package app
 
 import (
 	"log"
-	"test_api/internal/config"
-	"test_api/internal/db"
-	"test_api/internal/db/repository"
-	"test_api/internal/handlers"
-	"test_api/internal/services"
 	"time"
+
+	"github.com/theborzet/test_task-binance-/internal/services"
+
+	"github.com/theborzet/test_task-binance-/internal/config"
+	"github.com/theborzet/test_task-binance-/internal/db"
+	"github.com/theborzet/test_task-binance-/internal/db/repository"
+	"github.com/theborzet/test_task-binance-/internal/handlers"
 
 	"github.com/gofiber/fiber/v2"
 )
 
 func Run() {
+
 	config, err := config.LoadConfig()
 	if err != nil {
 		log.Printf("Some problems with config: %v", err)

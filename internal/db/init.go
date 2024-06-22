@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 
-	"test_api/internal/config"
+	"github.com/theborzet/test_task-binance-/internal/config"
 
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
