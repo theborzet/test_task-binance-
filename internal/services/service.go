@@ -16,6 +16,10 @@ type TickerService struct {
 	cfg  *config.Config
 }
 
+type result struct {
+	Price string `json:"price"`
+}
+
 func NewTickerService(repo repository.Repository, cfg *config.Config) *TickerService {
 	return &TickerService{
 		repo: repo,
@@ -56,9 +60,7 @@ func (s *TickerService) GetTickerPriceFromBinance(ticker string) (float64, error
 	}
 	defer resp.Body.Close()
 
-	var result struct {
-		Price string `json:"price"`
-	}
+	result := result{}
 
 	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
 		return 0, err

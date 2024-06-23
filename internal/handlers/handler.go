@@ -11,9 +11,9 @@ type request struct {
 }
 
 type response struct {
-	Ticker     string
-	Price      float64
-	Difference float64
+	Ticker     string  `json:"Ticker"`
+	Price      float64 `json:"Price"`
+	Difference float64 `json:"Difference"`
 }
 
 type TickerHandler struct {

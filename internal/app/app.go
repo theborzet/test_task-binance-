@@ -9,7 +9,7 @@ import (
 	"github.com/theborzet/test_task-binance-/internal/config"
 	"github.com/theborzet/test_task-binance-/internal/db"
 	"github.com/theborzet/test_task-binance-/internal/db/repository"
-	"github.com/theborzet/test_task-binance-/internal/handlers"
+	"github.com/theborzet/test_task-binance-/internal/routes"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -29,11 +29,12 @@ func Run() {
 	}()
 
 	repo := repository.NewSQLRepository(database)
+
 	service := services.NewTickerService(repo, config)
 
 	app := fiber.New()
 
-	handlers.RegistrationRoutess(app, service)
+	routes.RegistrationRoutess(app, service)
 
 	go func() {
 		for {
