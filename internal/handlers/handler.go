@@ -58,16 +58,10 @@ func (h *TickerHandler) FetchPrice(ctx *fiber.Ctx) error {
 	}
 
 	resp := response{
-		Ticker:     ticker,
+		Ticker:     ticker + "/USDT",
 		Price:      price,
 		Difference: difference,
 	}
 
-	response := fiber.Map{
-		"Ticker":     resp.Ticker + "/USDT",
-		"Price":      resp.Price,
-		"Difference": resp.Difference,
-	}
-
-	return ctx.JSON(response)
+	return ctx.JSON(resp)
 }

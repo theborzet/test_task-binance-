@@ -12,7 +12,7 @@ import (
 
 func Init(c *config.Config) *sqlx.DB {
 	url := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
-		c.Host, c.DBPort, c.User, c.Password, c.DBname)
+		c.DB.Host, c.DB.Port, c.DB.User, c.DB.Pass, c.DB.Name)
 
 	db, err := sqlx.Open("postgres", url)
 

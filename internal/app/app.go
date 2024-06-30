@@ -2,8 +2,8 @@ package app
 
 import (
 	"log"
-	"time"
 
+	"github.com/theborzet/test_task-binance-/internal/handlers"
 	"github.com/theborzet/test_task-binance-/internal/services"
 
 	"github.com/theborzet/test_task-binance-/internal/config"
@@ -15,10 +15,9 @@ import (
 )
 
 func Run() {
-
 	config, err := config.LoadConfig()
 	if err != nil {
-		log.Printf("Some problems with config: %v", err)
+		log.Fatalf("Some problems with config: %v", err)
 	}
 
 	database := db.Init(config)
@@ -32,41 +31,13 @@ func Run() {
 
 	service := services.NewTickerService(repo, config)
 
+	handler := handlers.NewTickerHandler(service)
+
 	app := fiber.New()
 
-	routes.RegistrationRoutess(app, service)
+	routes.RegistrationRoutess(app, handler)
 
-	go func() {
-		for {
-			tickers, err := repo.GetAllTickers()
-			if err != nil {
-				log.Printf("Some problems with tickers: %e", err)
-			}
-
-			for _, ticker := range tickers {
-				price, err := service.GetTickerPriceFromBinance(ticker)
-
-				if err != nil {
-					log.Printf("Error fetching price for ticker %s: %v\n", ticker, err)
-					continue
-				}
-
-				tickeID, err := repo.GetTickerID(ticker)
-
-				if err != nil {
-					log.Printf("Error fetching price for ticker %s: %v\n", ticker, err)
-					continue
-				}
-
-				err = repo.AddTickerPrice(tickeID, price, time.Now().Format("2006-01-02 15:04:05"))
-				if err != nil {
-					log.Printf("Error adding ticker price for ticker %s: %v\n", ticker, err)
-				}
-			}
-
-			time.Sleep(1 * time.Minute)
-		}
-	}()
+	go service.AdditionTickers()
 
 	if err := app.Listen(config.Port); err != nil {
 		log.Fatalf("Error starting server: %v", err)

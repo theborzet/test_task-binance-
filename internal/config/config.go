@@ -1,39 +1,42 @@
 package config
 
 import (
-	"github.com/spf13/viper"
+	"os"
+
+	"gopkg.in/yaml.v2"
 )
 
 type Config struct {
-	Port          string
-	Host          string
-	DBPort        string
-	User          string
-	Password      string
-	DBname        string
-	BinanceAPIURL string
+	Port    string        `yaml:"port"`
+	DB      DBConfig      `yaml:"db"`
+	Binance BinanceConfig `yaml:"binance"`
+}
+
+type DBConfig struct {
+	Host string `yaml:"host"`
+	Port string `yaml:"port"`
+	User string `yaml:"user"`
+	Pass string `yaml:"pass"`
+	Name string `yaml:"name"`
+}
+
+type BinanceConfig struct {
+	APIURL string `yaml:"api_url"`
 }
 
 func LoadConfig() (*Config, error) {
-	viper.AddConfigPath(".")
-	viper.SetConfigName(".env")
-	viper.SetConfigType("env")
-	viper.AutomaticEnv()
 
-	err := viper.ReadInConfig()
+	config, err := os.ReadFile("./configs/config.yaml")
 	if err != nil {
 		return nil, err
 	}
 
-	dbConfig := Config{
-		Port:          ":" + viper.GetString("PORT"),
-		Host:          viper.GetString("DB_HOST"),
-		DBPort:        viper.GetString("DB_PORT"),
-		User:          viper.GetString("DB_USER"),
-		Password:      viper.GetString("DB_PASS"),
-		DBname:        viper.GetString("DB_NAME"),
-		BinanceAPIURL: viper.GetString("BINANCE_API_URL"),
+	var cfg Config
+
+	if err := yaml.Unmarshal(config, &cfg); err != nil {
+		return nil, err
 	}
 
-	return &dbConfig, nil
+	return &cfg, nil
+
 }
