@@ -14,13 +14,14 @@ Test_API - это проект на Go, который использует Post
 1. Клонируйте репозиторий:
    git clone "https://github.com/theborzet/test_task-binance-"
 
-2. Создайте файл config.yaml:
-   Измените в файл config.yaml свои переменные конфигурации:
+2. Измените файлы configs/config.example.yaml и .env.example:
+   Введите конфигурацию для БД в этих файлах.
+   Уберите ".example" из названия файла
 
-3. Запустите Docker Compose:
+4. Запустите Docker Compose:
    docker-compose up --build
 
-4. Проверьте, что контейнеры запущены:
+5. Проверьте, что контейнеры запущены:
    Убедитесь, что контейнеры app и db запущены и работают корректно.
 
 ## Использование
