@@ -38,4 +38,4 @@ Test_API - это проект на Go, который использует Post
 3. Получение данных о тикере:
    Для получения данных о тикере используйте следующий запрос:
 
-   (Invoke-WebRequest -Uri "http://localhost:3000/fetch?ticker=ETH&date_from=18.06.24%2009:09:30&date_to=18.06.24%2009:17:09" -Method GET).Content
+   (Invoke-WebRequest -Uri "http://<IP-адрес>:3000/fetch?ticker=ETH&date_from=18.06.24%2009:09:30&date_to=18.06.24%2009:17:09" -Method GET).Content
